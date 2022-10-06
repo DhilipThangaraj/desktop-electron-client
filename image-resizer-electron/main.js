@@ -1,9 +1,10 @@
 const path = require("path");
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, Menu } = require("electron");
 
 const isDev = process.env.NODE_DEV !== "production";
 const isWindow = process.platform !== "win32";
 
+//create the main window
 function createMainWindow() {
   //Instantiating the browser window - whenever the app launches that time under the hood electron client initiate chromium browser.
   const mainWindow = new BrowserWindow({
@@ -19,9 +20,28 @@ function createMainWindow() {
   mainWindow.loadFile(path.join(__dirname, "./renderer/index.html"));
 }
 
-//initial mounting
+//Menu Template
+const menu = [
+  {
+    label: "File",
+    submenu: [
+      {
+        label: "Quit",
+        click: () => app.quit(),
+        accelerator: "ctrl+w",
+      },
+    ],
+  },
+];
+
+//When App is ready
 app.whenReady().then(() => {
   createMainWindow();
+
+  //Implement Menu
+  const mainMenu = Menu.buildFromTemplate(menu);
+  Menu.setApplicationMenu(mainMenu);
+
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createMainWindow();
