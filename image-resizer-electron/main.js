@@ -11,6 +11,11 @@ function createMainWindow() {
     title: "Image Resizer",
     width: isDev ? 1000 : 500,
     height: 800,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: true,
+      preload: path.join(__dirname, "pre-load.js"),
+    },
   });
 
   //Open devtools if in dev env
@@ -18,7 +23,7 @@ function createMainWindow() {
     mainWindow.webContents.openDevTools();
   }
 
-  mainWindow.loadFile(path.join(__dirname, "./renderer/about.html"));
+  mainWindow.loadFile(path.join(__dirname, "./renderer/index.html"));
 }
 
 //create the about window
